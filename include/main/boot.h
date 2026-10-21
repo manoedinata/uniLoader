@@ -18,6 +18,9 @@ extern void load_kernel_and_jump(unsigned int r0, unsigned int r1,
                                  void* dtb_addr, void* kernel_entry);
 #endif
 
+// Copy (or inflate) the kernel to CONFIG_PAYLOAD_ENTRY; 0 on success
+int load_kernel_payload(const void* kernel, unsigned long size);
+
 // From arch/<arch>/load-kernel.c
 void arch_load_kernel(void* kernel, void* dt, void* ramdisk);
 

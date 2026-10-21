@@ -45,6 +45,16 @@ menu "Building options"
 		help
 		  Path to the kernel, which is going to get embedded to uniLoader
 
+	config KERNEL_GZIP
+		bool "Kernel image is gzip-compressed"
+		depends on EMBED_LINUX
+		default n
+		help
+		  Select this if the kernel image at KERNEL_PATH is gzip-compressed
+		  (e.g. arch/arm64/boot/Image.gz). uniLoader inflates it to
+		  PAYLOAD_ENTRY and checks its CRC32 before jumping, which keeps
+		  the boot image small for bootloaders that only take raw kernels.
+
 	config DT_PATH
 		string "Path to device tree image"
 		depends on EMBED_LINUX
