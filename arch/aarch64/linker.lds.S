@@ -24,6 +24,7 @@ INPUT(RAMDISK_PATH)
 SECTIONS
 {
 	. = TEXT_BASE;
+	__image_start = .;
 
 	.text : {
 #ifdef CONFIG_POSITION_INDEPENDENT
@@ -82,6 +83,8 @@ SECTIONS
 		_reloc_end = .;
 #endif
 	}
+
+	__image_end = .;
 
 	kernel_size = SIZEOF(.kernel);
 #ifdef CONFIG_RAMDISK_NO_COPY

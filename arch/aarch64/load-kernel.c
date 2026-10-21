@@ -9,7 +9,8 @@
 
 void arch_load_kernel(void* kernel, void* dt, void* ramdisk)
 {
-	memcpy((void*)CONFIG_PAYLOAD_ENTRY, kernel, (unsigned long) &kernel_size);
+	if (load_kernel_payload(kernel, (unsigned long) &kernel_size))
+		return;
 #ifndef CONFIG_RAMDISK_NO_COPY
 	__optimized_memcpy((void*)CONFIG_RAMDISK_ENTRY, ramdisk, (unsigned long) &ramdisk_size);
 #endif

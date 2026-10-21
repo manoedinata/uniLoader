@@ -13,6 +13,7 @@ TARGET(binary)
 SECTIONS
 {
 	. = TEXT_BASE;
+	__image_start = .;
 
 	.text : {
 		KEEP(*(.text.start))
@@ -51,6 +52,7 @@ SECTIONS
 	}
 
 	_end = .;
+	__image_end = .;
 
 	/* size optimization for flat binaries. */
 	/DISCARD/ : {
