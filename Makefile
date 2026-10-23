@@ -256,11 +256,16 @@ ifneq ($(LLVM),)
   KBUILD_CFLAGS += $(CLANG_FLAGS)
   KBUILD_AFLAGS += $(CLANG_FLAGS)
 endif
+# uniLoader runs with the MMU off, where all memory is Device-type and any
+# unaligned access faults: keep every access aligned, not just the ones that
+# happen to land on aligned addresses with the current link layout
 ifeq ($(ARCH), arm)
 KBUILD_CFLAGS += -march=armv7-a -mfloat-abi=soft -mtune=cortex-a9
+KBUILD_CFLAGS += -mno-unaligned-access
 KBUILD_AFLAGS += -march=armv7-a -mfloat-abi=soft -mtune=cortex-a9
 else
 KBUILD_CFLAGS += -march=armv8-a -mtune=cortex-a53 -mcpu=cortex-a53
+KBUILD_CFLAGS += -mstrict-align
 KBUILD_AFLAGS += -march=armv8-a -mtune=cortex-a53 -mcpu=cortex-a53
 endif
 
