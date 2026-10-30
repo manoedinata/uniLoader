@@ -8,6 +8,7 @@
 
 #include <stddef.h>
 #include <drivers/framework.h>
+#include <lib/failsafe.h>
 
 struct board_ops {
 	int (*early_init)(void);
@@ -22,6 +23,8 @@ struct board_data {
 	const struct device *devices;
 	size_t num_devices;
 	unsigned int quirks;
+	/* optional, used with CONFIG_FAILSAFE */
+	const struct failsafe_ops *failsafe;
 };
 
 #endif /* BOARD_H_ */
