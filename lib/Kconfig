@@ -35,6 +35,51 @@ menu "Libraries"
 		default 2400
 		depends on RAMLOG
 
+	config FAILSAFE
+		bool "Failsafe: watchdog, boot-loop breaker, escape slot"
+		default n
+		help
+		  For devices that cannot be reset by hand. Arms a watchdog before
+		  the payload starts, counts boots that never reach the payload's
+		  init and, after a watchdog reset or a boot loop, resets into the
+		  other boot slot. The board provides struct failsafe_ops. ARMv8
+		  only. See lib/failsafe/failsafe.c.
+
+	config FAILSAFE_SLOT
+		int "Boot slot of this image (0 = primary, 1 = secondary)"
+		range 0 1
+		default 1
+		depends on FAILSAFE
+		help
+		  Samsung: 0 = BOOT, 1 = RECOVERY. Failures reset into the other.
+
+	config FAILSAFE_SCRATCH_ADDR
+		hex "Address of 3 scratch words that survive resets"
+		depends on FAILSAFE
+		help
+		  Must be reserved in the payload's device tree. The payload's
+		  init writes 0 to this address + 4 once it runs.
+
+	config FAILSAFE_MAX_BOOTS
+		int "Boots without reaching init before escaping"
+		default 3
+		depends on FAILSAFE
+
+	config FAILSAFE_WDT_SEC
+		int "Watchdog timeout in seconds (0 = the longest possible)"
+		default 0
+		depends on FAILSAFE
+
+	config FAILSAFE_WDT_TEST
+		bool "Watchdog test: wait for the reset instead of booting"
+		default n
+		depends on FAILSAFE
+
+	config FAILSAFE_WDT_TEST_SEC
+		int "Watchdog timeout for the test"
+		default 10
+		depends on FAILSAFE_WDT_TEST
+
 	config LIBFDT
 		bool "Support for libfdt"
 		default y

@@ -9,6 +9,8 @@
 #include <main/boot.h>
 #include <main/main.h>
 #include <lib/debug.h>
+#include <lib/failsafe.h>
+#include <lib/ramlog.h>
 #ifdef CONFIG_BOOTLOADER_FDT_HOLD_SEC
 #include <lib/delay.h>
 #endif
@@ -34,6 +36,7 @@ static void print_splash(void)
 void main(void* dt, void* kernel, void* ramdisk, void* bl_dt)
 {
 	early_console_init();
+	ramlog_init();
 	INITCALL(board_ops.ops.early_init);
 
 	driver_probe_all(board_ops.devices, board_ops.num_devices);
@@ -41,6 +44,8 @@ void main(void* dt, void* kernel, void* ramdisk, void* bl_dt)
 	print_splash();
 
 	INITCALL(board_ops.ops.late_init);
+
+	failsafe_run(board_ops.failsafe);
 
 #ifdef CONFIG_USE_BOOTLOADER_FDT
 	/* The payload wants what the bootloader built (dtbo applied, memory
