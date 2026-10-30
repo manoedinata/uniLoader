@@ -12,6 +12,8 @@
 struct board_ops {
 	int (*early_init)(void);
 	int (*late_init)(void);
+	/* optional: last thing before the payload is started */
+	int (*pre_boot)(void);
 };
 
 struct board_data {
