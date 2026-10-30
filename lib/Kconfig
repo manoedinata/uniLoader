@@ -13,6 +13,28 @@ menu "Libraries"
 		  in mind that your board files need to provide uart_puts
 		  functionality in order for this to work.
 
+	config RAMLOG
+		bool "Keep the loader log in a ramoops console zone"
+		default n
+		help
+		  Append every printk to a Linux ramoops (pstore) console zone in
+		  RAM that survives resets. The next kernel with the same ramoops
+		  geometry shows the previous kernel's log followed by the loader
+		  lines in /sys/fs/pstore/console-ramoops-0. ARMv8 only.
+
+	config RAMLOG_ADDR
+		hex "Address of the ramoops console zone"
+		depends on RAMLOG
+
+	config RAMLOG_SIZE
+		hex "Size of the ramoops console zone"
+		depends on RAMLOG
+
+	config RAMLOG_TAIL
+		int "Bytes of the previous log printed on a failure"
+		default 2400
+		depends on RAMLOG
+
 	config LIBFDT
 		bool "Support for libfdt"
 		default y
