@@ -15,6 +15,7 @@ endif
 
 # debug
 lib-y += console/console.o
+lib-$(CONFIG_RAMLOG) += ramlog/ramlog.o
 
 # busy-wait delays on the ARMv8 generic timer
 ifeq ($(ARCH),aarch64)
