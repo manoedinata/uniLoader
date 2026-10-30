@@ -16,6 +16,11 @@ endif
 # debug
 lib-y += console/console.o
 
+# busy-wait delays on the ARMv8 generic timer
+ifeq ($(ARCH),aarch64)
+lib-y += delay/delay.o
+endif
+
 # unic (neatlibc still temporarily resides)
 lib-y += unic/string.o
 
