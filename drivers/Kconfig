@@ -5,6 +5,20 @@ menu "Drivers"
 		help
 		    Say Y if you have a device with the Samsung Exynos ACPM block.
 
+	config EXYNOS_WDT
+		bool "Support for the Samsung Exynos watchdog"
+		default n
+		help
+		    Say Y to arm the s3c2410-style Exynos watchdog from the board
+		    file (e.g. for the failsafe).
+
+	config SAMSUNG_SBOOT
+		bool "Support for Samsung S-BOOT reboot targets"
+		default n
+		help
+		    Say Y to reset into BOOT, RECOVERY or Download mode through the
+		    PMU INFORM register that Samsung's S-BOOT reads.
+
 	config EXYNOS_SPEEDY
 		bool "Support for Samsung Exynos SPEEDY bus"
 		default n
