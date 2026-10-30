@@ -55,6 +55,23 @@ menu "Building options"
 		  PAYLOAD_ENTRY and checks its CRC32 before jumping, which keeps
 		  the boot image small for bootloaders that only take raw kernels.
 
+	config USE_BOOTLOADER_FDT
+		bool "Pass the bootloader's FDT to the payload instead of the embedded dtb"
+		depends on EMBED_LINUX && LIBFDT
+		default n
+		help
+		  The FDT pointer the bootloader hands to uniLoader (x0) is checked
+		  and, if valid, patched with the initrd range and passed on. The
+		  embedded dtb is the fallback. AArch64 only. Needed for kernels that rely on the
+		  bootloader's FDT, like Samsung downstream kernels.
+
+	config BOOTLOADER_FDT_HOLD_SEC
+		int "Seconds to hold the screen after printing the bootloader FDT summary"
+		depends on USE_BOOTLOADER_FDT
+		default 0
+		help
+		  For bring-up: leaves time to read (or photograph) the summary.
+
 	config DT_PATH
 		string "Path to device tree image"
 		depends on EMBED_LINUX
