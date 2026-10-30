@@ -64,6 +64,8 @@ void main(void* dt, void* kernel, void* ramdisk, void* bl_dt)
 	}
 #endif
 
+	INITCALL(board_ops.ops.pre_boot);
+
 	boot_kernel(dt, kernel, ramdisk);
 
 	// todo: reset the board?
