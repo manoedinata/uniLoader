@@ -15,6 +15,13 @@ menu "Libraries"
 		  logo). Only the set glyph pixels are written. The screen is still
 		  cleared once if the text reaches the bottom and wraps.
 
+	config NO_SPLASH
+		bool "Do not print the uniLoader banner"
+		default n
+		help
+		  Skip the ASCII-art banner at start. The other log lines (version,
+		  board, boot steps) are still printed.
+
 	config EARLYCON
 		bool "Support for UART early console"
 		default n
