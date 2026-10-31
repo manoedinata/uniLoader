@@ -5,6 +5,16 @@ menu "Libraries"
 		help
 		  Say Y if you want to have Framebuffer output.
 
+	config SIMPLE_FB_KEEP_SCREEN
+		bool "Keep the bootloader's picture on the framebuffer"
+		depends on SIMPLE_FB
+		default n
+		help
+		  Do not clear the framebuffer at probe: the loader text is drawn
+		  over whatever the previous bootloader left there (e.g. the boot
+		  logo). Only the set glyph pixels are written. The screen is still
+		  cleared once if the text reaches the bottom and wraps.
+
 	config EARLYCON
 		bool "Support for UART early console"
 		default n
