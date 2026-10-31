@@ -202,8 +202,10 @@ static int simplefb_probe(void *data)
 {
 	fb_info = data;
 
+#ifndef CONFIG_SIMPLE_FB_KEEP_SCREEN
 	clean_fbmem((char*)fb_info->address, fb_info->width, fb_info->height,
 		 fb_info->stride);
+#endif
 
 	fb_info->scale_f = get_font_scale_factor();
 
