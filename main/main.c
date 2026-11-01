@@ -20,6 +20,20 @@
 
 extern struct board_data board_ops;
 
+#ifdef CONFIG_USE_BOOTLOADER_FDT
+static unsigned long fdt_getprop_addr(const void *fdt, int node, const char *name)
+{
+	int len;
+	const fdt32_t *p = fdt_getprop(fdt, node, name, &len);
+
+	if (!p)
+		return 0;
+	if (len == 8)
+		return ((unsigned long)fdt32_to_cpu(p[0]) << 32) | fdt32_to_cpu(p[1]);
+	return fdt32_to_cpu(p[0]);
+}
+#endif
+
 static void print_splash(void)
 {
 #ifndef CONFIG_NO_SPLASH
@@ -49,6 +63,9 @@ void main(void* dt, void* kernel, void* ramdisk, void* bl_dt)
 
 	failsafe_run(board_ops.failsafe);
 
+	/* position independent: where the previous bootloader put this image */
+	printk(KERN_INFO, "running at %p, bootloader x0=%p\n", (void *)main, bl_dt);
+
 #ifdef CONFIG_USE_BOOTLOADER_FDT
 	/* The payload wants what the bootloader built (dtbo applied, memory
 	 * map, reserved regions, cmdline), not the embedded dtb. */
@@ -61,6 +78,10 @@ void main(void* dt, void* kernel, void* ramdisk, void* bl_dt)
 		       bl_dt, fdt_totalsize(bl_dt),
 		       (const char *)fdt_getprop(bl_dt, 0, "model", NULL));
 		printk(KERN_INFO, "bootloader bootargs: %s\n", args ? args : "(none)");
+		if (chosen >= 0)
+			printk(KERN_INFO, "bootloader initrd: %lx..%lx\n",
+			       fdt_getprop_addr(bl_dt, chosen, "linux,initrd-start"),
+			       fdt_getprop_addr(bl_dt, chosen, "linux,initrd-end"));
 		dt = bl_dt;
 #if CONFIG_BOOTLOADER_FDT_HOLD_SEC
 		mdelay(CONFIG_BOOTLOADER_FDT_HOLD_SEC * 1000);
