@@ -4,3 +4,4 @@
 
 obj-$(CONFIG_POSITION_INDEPENDENT) += aarch64/reloc.o
 obj-y += aarch64/start.o aarch64/load-kernel.o aarch64/memcpy.o
+obj-$(CONFIG_MMU_IDENTITY) += aarch64/mmu.o aarch64/mmu-off.o
