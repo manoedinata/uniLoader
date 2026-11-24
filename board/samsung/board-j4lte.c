@@ -12,11 +12,22 @@
 #define DECON_F_BASE		0x14830000
 #define HW_SW_TRIG_CONTROL	0x70
 
+/* PMU INFORM3: S-BOOT boot target, not cleared by S-BOOT itself */
+#define PMU_INFORM3		0x11c8080c
+#define SBOOT_TARGET_NORMAL	0x12345670
+
 // Early initialization
 int j4lte_init(void)
 {
 	/* Allow framebuffer to be written to */
 	*(int*) (DECON_F_BASE + HW_SW_TRIG_CONTROL) = 0x1281;
+
+	/*
+	 * After "reboot recovery" INFORM3 still says RECOVERY: if this boot
+	 * hangs, a forced reset would start the same image again. Point it
+	 * back at BOOT now that we run.
+	 */
+	*(volatile unsigned int *)PMU_INFORM3 = SBOOT_TARGET_NORMAL;
 	return 0;
 }
 
