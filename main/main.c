@@ -49,8 +49,11 @@ static void print_splash(void)
 	printk(KERN_INFO, "welcome to uniLoader %s on %s\n", VER_TAG, board_ops.name);
 }
 
+void *bootloader_fdt;
+
 void main(void* dt, void* kernel, void* ramdisk, void* bl_dt)
 {
+	bootloader_fdt = bl_dt;
 	early_console_init();
 	ramlog_init();
 	INITCALL(board_ops.ops.early_init);

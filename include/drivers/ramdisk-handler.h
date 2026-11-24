@@ -8,6 +8,9 @@
 
 extern unsigned long ramdisk_size;
 
+/* x0 the previous bootloader handed over (set by main()) */
+extern void *bootloader_fdt;
+
 int ramdisk_handler_patch_dtb(const void *fdt, void *buf, int bufsize);
 
 #endif

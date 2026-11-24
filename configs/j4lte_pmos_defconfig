@@ -1,0 +1,14 @@
+CONFIG_POSITION_INDEPENDENT=y
+CONFIG_CROSS_COMPILE="aarch64-linux-gnu-"
+CONFIG_EXYNOS_7570=y
+CONFIG_SAMSUNG_J4LTE=y
+# Relocated copy (whole image incl. the kernel) stays clear of S-BOOT's ramdisk
+# (0x43000000), its FDT (0x48000000), the kernel (0x50000000) and tima (0x52800000)
+CONFIG_TEXT_BASE=0x58000000
+CONFIG_PAYLOAD_ENTRY=0x50000000
+CONFIG_RAMDISK_ENTRY=0x43000000
+# The boot.img ramdisk (e.g. postmarketOS initramfs) is loaded by S-BOOT to
+# 0x43000000 and its range is in /chosen of S-BOOT's FDT at 0x48000000
+CONFIG_RAMDISK_NO_COPY=y
+CONFIG_RAMDISK_FROM_BOOTLOADER=y
+CONFIG_BOOTLOADER_FDT_ADDR=0x48000000

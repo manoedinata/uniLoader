@@ -411,7 +411,11 @@ uniloader-libs := $(patsubst %,%/lib.a, $(uniloader-lib-dirs))
 uniloader-all := $(uniloader-objs) $(uniloader-libs)
 
 # Linker script dependencies
+ifdef CONFIG_RAMDISK_FROM_BOOTLOADER
+linker-script-deps := $(KERNEL_PATH)
+else
 linker-script-deps := $(KERNEL_PATH) $(RAMDISK_PATH)
+endif
 
 # ===========================================================================
 # Build targets
@@ -429,7 +433,9 @@ quiet_cmd_cpp_lds = LDS     $@
                             -DRAMDISK_PATH=$(RAMDISK_PATH) \
                             -P -o $@
 
-ifdef CONFIG_RAMDISK_NO_COPY
+ifdef CONFIG_RAMDISK_FROM_BOOTLOADER
+	  cmd_cpp_lds += -DRAMDISK_SIZE=0
+else ifdef CONFIG_RAMDISK_NO_COPY
 	  cmd_cpp_lds += -DRAMDISK_SIZE=$(shell stat -c%s $(RAMDISK_PATH))
 endif
 

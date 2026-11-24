@@ -93,6 +93,28 @@ menu "Building options"
 		help
 		  Select this if the bootloader copies the ramdisk itself
 
+	config RAMDISK_FROM_BOOTLOADER
+		bool "Use the ramdisk the previous bootloader loaded"
+		depends on RAMDISK_NO_COPY && LIBFDT
+		default n
+		help
+		  Nothing is embedded at RAMDISK_PATH. The initrd range is read
+		  at runtime from /chosen (linux,initrd-start/-end) of the FDT the
+		  previous bootloader built and copied into the embedded dtb. For
+		  boot images whose ramdisk is generated after uniLoader is built
+		  (e.g. postmarketOS initramfs), with a bootloader such as
+		  Samsung S-BOOT that loads the boot.img ramdisk itself.
+
+	config BOOTLOADER_FDT_ADDR
+		hex "Fixed address of the previous bootloader's FDT"
+		depends on RAMDISK_FROM_BOOTLOADER
+		default 0x0
+		help
+		  Where the previous bootloader leaves its FDT. Tried before x0;
+		  0 means only x0 is used. Note that POSITION_INDEPENDENT copies
+		  the whole image to TEXT_BASE before main(), so that copy must
+		  not cover this FDT or the ramdisk.
+
 endmenu
 
 source "drivers/Kconfig"
