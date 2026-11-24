@@ -10,4 +10,24 @@ menu "Architecture"
 		help
 		  Say Y if your want to appened a linux kernel image header to
 		  uniLoader.
+
+	config MMU_IDENTITY
+		bool "Cache the payload copy with an identity-mapped MMU (AArch64)"
+		default n
+		help
+		  Say Y to turn on the EL1 MMU while the kernel is copied or
+		  inflated. Only uniLoader's own image and MMU_PAYLOAD_WINDOW
+		  bytes at PAYLOAD_ENTRY are cacheable; everything else stays
+		  Device-nGnRnE like with the MMU off. The MMU and D-cache are
+		  off again, the kernel cleaned to the PoC, before the jump.
+		  Makes copying and especially KERNEL_GZIP inflating much faster.
+		  AArch64 at EL1, or at EL2 without VHE; otherwise a no-op.
+
+	config MMU_PAYLOAD_WINDOW
+		hex "Cacheable bytes at PAYLOAD_ENTRY"
+		depends on MMU_IDENTITY
+		default 0x4000000
+		help
+		  Must cover the uncompressed kernel and must not reach any
+		  secure or firmware-reserved memory.
 endmenu
